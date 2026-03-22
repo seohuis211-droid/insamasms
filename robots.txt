@@ -1,2 +1,0 @@
-User-agent: *
-Sitemap: https://insamasms.pages.dev/sitemap.xml

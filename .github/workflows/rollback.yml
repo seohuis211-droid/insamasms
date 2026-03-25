@@ -1,0 +1,28 @@
+name: Emergency Rollback
+on:
+  workflow_dispatch:
+    inputs:
+      commit_hash:
+        description: '복구할 지점의 커밋 해시'
+        required: true
+        default: 'a4e8e75574079f75e20f22492e6d464d1a9157e7'
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Force Reset to Specific Commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 형님이 주신 정확한 해시값으로 강제 리셋
+          git reset --hard ${{ github.event.inputs.commit_hash }}
+          
+          # 서버에 강제로 덮어쓰기 (9,000개 파일 원복)
+          git push origin main --force

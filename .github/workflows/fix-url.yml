@@ -1,0 +1,24 @@
+name: Bulk Replace URL
+
+on:
+  workflow_dispatch: # 형님이 버튼 누를 때만 작동하게 설정
+
+jobs:
+  replace-url:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Replace URL in all HTML files
+        run: |
+          # 20만 개 파일을 'sed' 명령어로 서버에서 직접 박멸 (가장 빠름)
+          find . -name "*.html" -exec sed -i 's/insamasms.pages.dev/clicknn.co.kr/g' {} +
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "Bulk replace domain to clicknn.co.kr" || echo "No changes to commit"
+          git push

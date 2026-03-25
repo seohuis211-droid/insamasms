@@ -7,22 +7,27 @@ on:
         required: true
         default: 'a4e8e75574079f75e20f22492e6d464d1a9157e7'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # 노드 경고 삭제 ㅡㅡ
+
 jobs:
   rollback:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 쓰기 권한 강제 부여 ㅡㅡ
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # 모든 과거 기록을 다 가져와야 롤백이 됨 ㅡㅡ
 
       - name: Force Reset to Specific Commit
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 형님이 주신 정확한 해시값으로 강제 리셋
+          # 형님이 주신 해시값으로 강제 리셋 ㅡㅡ
           git reset --hard ${{ github.event.inputs.commit_hash }}
           
-          # 서버에 강제로 덮어쓰기 (9,000개 파일 원복)
+          # 강제로 서버에 덮어쓰기
           git push origin main --force

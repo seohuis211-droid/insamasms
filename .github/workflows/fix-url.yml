@@ -1,4 +1,4 @@
-name: Final Premium Overlay Fix
+name: Ultimate Stable Overlay
 
 on:
   workflow_dispatch:
@@ -13,62 +13,64 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Inject Overlay Safely
+      - name: Run Python Script
+        shell: python
         run: |
-          # 오늘 날짜
-          TODAY="2026년 03월 25일(수)"
+          import os
+          import glob
 
-          # HTML 파일들을 찾아서 하나씩 작업
-          find . -name "*.html" | while read -r file; do
-            FILENAME=$(basename "$file" .html)
-            REGION=$(echo "$FILENAME" | cut -d'_' -f1)
-            KEYWORD=$(echo "$FILENAME" | cut -d'_' -f2)
+          # 형님이 주신 디자인 그대로 박아넣습니다 ㅡㅡ
+          overlay_html = """
+          <style>
+            @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+            #res-overlay {
+              width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+              background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
+              background-size: cover; background-position: center; font-family: 'Pretendard', sans-serif; color: white; text-align: center;
+              position: relative; z-index: 9999;
+            }
+            .premium-label { font-size: 24px; font-weight: 700; color: #ff00ff; margin-bottom: 15px; text-shadow: 0 0 8px rgba(255,0,255,0.8); }
+            .main-title { font-size: 60px; font-weight: 700; line-height: 1.2; margin-bottom: 25px; color: #fff; }
+            .status-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 15px 35px; border-radius: 12px; margin-bottom: 35px; box-shadow: 0 0 20px #fff; }
+            .cta-button { text-decoration: none; font-size: 30px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%); padding: 20px 50px; border-radius: 60px; border: 3px solid #fff; display: inline-block; }
+          </style>
+          <div id='res-overlay'>
+            <div class='premium-label'>★ {region} No.1 정보 ★</div>
+            <h1 class='main-title'>{region} {keyword}<br><span style='color:#ffff00;'>PREMIUM</span></h1>
+            <div class='status-box'>
+              <p style='color:#ff66ff; font-size:18px;'>기준: 2026년 03월 25일(수)</p>
+              <p style='font-size:24px; font-weight:900;'>✨ 현재 정상 영업중 ✨</p>
+            </div>
+            <a href='tel:010-0000-0000' class='cta-button'>📞 전화 즉시 연결</a>
+          </div>
+          """
 
-            # 임시 파일에 오버레이 코드를 먼저 만듭니다 (충돌 방지) ㅡㅡ
-            cat <<'EOF' > overlay.txt
-<style>
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-  #res-overlay {
-    width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)),
-                url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
-    background-size: cover; background-position: center; font-family: 'Pretendard', sans-serif; color: white; text-align: center;
-    position: relative; z-index: 9999;
-  }
-  .premium-label { font-size: clamp(20px, 6vw, 28px); font-weight: 700; color: #ff00ff; letter-spacing: 1px; margin-bottom: 15px; text-shadow: 0 0 8px rgba(255,0,255,0.8); }
-  .main-title { font-size: clamp(38px, 9vw, 80px); font-weight: 700; line-height: 1.2; margin-bottom: 25px; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
-  .main-title span { color: #ffff00; text-shadow: 0 0 20px #ffff00; }
-  .status-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 15px 35px; border-radius: 12px; margin-bottom: 35px; box-shadow: 0 0 20px #fff; animation: boxGlow 1.5s infinite alternate; }
-  .status-date { font-size: 18px; color: #ff66ff; margin-bottom: 5px; font-weight: 500; }
-  .status-active { font-size: 24px; font-weight: 900; }
-  .cta-button { text-decoration: none; font-size: clamp(24px, 6vw, 32px); font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%); padding: 22px 60px; border-radius: 60px; border: 3px solid #fff; transition: 0.3s; animation: btnPulse 1.2s infinite; display: inline-block; }
-  @keyframes boxGlow { from { box-shadow: 0 0 10px #fff; } to { box-shadow: 0 0 30px #ff00ff; border-color: #ff00ff; } }
-  @keyframes btnPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-</style>
-<div id='res-overlay'>
-  <div class='premium-label'>★ REPLACE_REGION No.1 정보 ★</div>
-  <h1 class='main-title'>REPLACE_REGION REPLACE_KEYWORD<br><span>PREMIUM</span></h1>
-  <div class='status-box'>
-    <p class='status-date'>기준: REPLACE_DATE</p>
-    <p class='status-active'>✨ 현재 정상 영업중 ✨</p>
-  </div>
-  <p style='font-size: 20px; color: #ffff00; margin-bottom: 45px; font-weight: 700; text-shadow: 2px 2px 5px #000;'>압도적인 퀄리티로 모시겠습니다.</p>
-  <a href='tel:010-0000-0000' class='cta-button'>📞 전화 즉시 연결</a>
-</div>
-EOF
-            # 키워드 치환 ㅡㅡ
-            sed -i "s/REPLACE_REGION/$REGION/g" overlay.txt
-            sed -i "s/REPLACE_KEYWORD/$KEYWORD/g" overlay.txt
-            sed -i "s/REPLACE_DATE/$TODAY/g" overlay.txt
+          files = glob.glob("**/*.html", recursive=True)
+          for f_path in files:
+              try:
+                  with open(f_path, 'r', encoding='utf-8') as f:
+                      content = f.read()
+                  
+                  if "res-overlay" in content: continue
+                  
+                  fname = os.path.basename(f_path).replace(".html", "")
+                  parts = fname.split('_')
+                  r = parts[0] if len(parts) > 0 else "전국"
+                  k = parts[1] if len(parts) > 1 else "가라오케"
 
-            # <body> 태그 뒤에 임시 파일 내용을 끼워넣기 ㅡㅡ
-            sed -i "/<body[^>]*>/r overlay.txt" "$file"
-          done
+                  # <body> 바로 뒤에 삽입 ㅡㅡ
+                  final_overlay = overlay_html.format(region=r, keyword=k)
+                  if "<body>" in content:
+                      new_content = content.replace("<body>", f"<body>{final_overlay}", 1)
+                      with open(f_path, 'w', encoding='utf-8') as f:
+                          f.write(new_content)
+              except:
+                  continue
 
-      - name: Commit and Push
+      - name: Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Fixed Overlay Injection" || exit 0
+          git commit -m "Fixed all syntax errors" || exit 0
           git push

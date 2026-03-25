@@ -1,4 +1,4 @@
-name: Insert Premium Overlay
+name: Final Premium Overlay Fix
 
 on:
   workflow_dispatch:
@@ -7,25 +7,25 @@ permissions:
   contents: write
 
 jobs:
-  inject-design:
+  inject-overlay:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Apply Premium UI to All Files
+      - name: Inject Overlay Safely
         run: |
-          # 오늘 날짜 세팅 ㅡㅡ
+          # 오늘 날짜
           TODAY="2026년 03월 25일(수)"
 
+          # HTML 파일들을 찾아서 하나씩 작업
           find . -name "*.html" | while read -r file; do
-            # 파일명에서 지역/키워드 추출
             FILENAME=$(basename "$file" .html)
             REGION=$(echo "$FILENAME" | cut -d'_' -f1)
             KEYWORD=$(echo "$FILENAME" | cut -d'_' -f2)
 
-            # 형님이 주신 그 '진짜' 코드 양식 ㅡㅡ
-            OVERLAY="
+            # 임시 파일에 오버레이 코드를 먼저 만듭니다 (충돌 방지) ㅡㅡ
+            cat <<'EOF' > overlay.txt
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
   #res-overlay {
@@ -33,7 +33,7 @@ jobs:
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)),
                 url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
     background-size: cover; background-position: center; font-family: 'Pretendard', sans-serif; color: white; text-align: center;
-    position: relative; z-index: 10;
+    position: relative; z-index: 9999;
   }
   .premium-label { font-size: clamp(20px, 6vw, 28px); font-weight: 700; color: #ff00ff; letter-spacing: 1px; margin-bottom: 15px; text-shadow: 0 0 8px rgba(255,0,255,0.8); }
   .main-title { font-size: clamp(38px, 9vw, 80px); font-weight: 700; line-height: 1.2; margin-bottom: 25px; color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
@@ -46,25 +46,29 @@ jobs:
   @keyframes btnPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 </style>
 <div id='res-overlay'>
-  <div class='premium-label'>★ 최상위 멤버십 가이드 ★</div>
-  <h1 class='main-title'>$REGION $KEYWORD<br><span>PREMIUM</span></h1>
+  <div class='premium-label'>★ REPLACE_REGION No.1 정보 ★</div>
+  <h1 class='main-title'>REPLACE_REGION REPLACE_KEYWORD<br><span>PREMIUM</span></h1>
   <div class='status-box'>
-    <p class='status-date'>기준: $TODAY</p>
+    <p class='status-date'>기준: REPLACE_DATE</p>
     <p class='status-active'>✨ 현재 정상 영업중 ✨</p>
   </div>
   <p style='font-size: 20px; color: #ffff00; margin-bottom: 45px; font-weight: 700; text-shadow: 2px 2px 5px #000;'>압도적인 퀄리티로 모시겠습니다.</p>
   <a href='tel:010-0000-0000' class='cta-button'>📞 전화 즉시 연결</a>
-</div>"
+</div>
+EOF
+            # 키워드 치환 ㅡㅡ
+            sed -i "s/REPLACE_REGION/$REGION/g" overlay.txt
+            sed -i "s/REPLACE_KEYWORD/$KEYWORD/g" overlay.txt
+            sed -i "s/REPLACE_DATE/$TODAY/g" overlay.txt
 
-            # 3. 기존 <body> 바로 뒤에 삽입 (기존 내용은 아래로 밀림) ㅡㅡ
-            # 기존 내용이 깨지지 않게 이스케이프 처리하여 안전하게 삽입합니다.
-            sed -i "/<body[^>]*>/a $OVERLAY" "$file"
+            # <body> 태그 뒤에 임시 파일 내용을 끼워넣기 ㅡㅡ
+            sed -i "/<body[^>]*>/r overlay.txt" "$file"
           done
 
-      - name: Commit and Push Changes
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Add premium overlay with Unsplash background" || exit 0
+          git commit -m "Fixed Overlay Injection" || exit 0
           git push

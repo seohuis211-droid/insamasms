@@ -1,76 +1,49 @@
-name: Ultimate Stable Overlay
+name: Final Push Overlay
 
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  inject-overlay:
+  inject:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Python Script
-        shell: python
+      - name: Insert Design
         run: |
-          import os
-          import glob
+          # 9,000개 파일에 형님 디자인 강제 삽입 ㅡㅡ
+          find . -name "*.html" | while read -r file; do
+            # 파일명에서 지역_키워드 추출
+            FILENAME=$(basename "$file" .html)
+            REGION=$(echo "$FILENAME" | cut -d'_' -f1)
+            KEYWORD=$(echo "$FILENAME" | cut -d'_' -f2)
 
-          # 형님이 주신 디자인 그대로 박아넣습니다 ㅡㅡ
-          overlay_html = """
-          <style>
-            @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-            #res-overlay {
-              width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-              background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
-              background-size: cover; background-position: center; font-family: 'Pretendard', sans-serif; color: white; text-align: center;
-              position: relative; z-index: 9999;
-            }
-            .premium-label { font-size: 24px; font-weight: 700; color: #ff00ff; margin-bottom: 15px; text-shadow: 0 0 8px rgba(255,0,255,0.8); }
-            .main-title { font-size: 60px; font-weight: 700; line-height: 1.2; margin-bottom: 25px; color: #fff; }
-            .status-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 15px 35px; border-radius: 12px; margin-bottom: 35px; box-shadow: 0 0 20px #fff; }
-            .cta-button { text-decoration: none; font-size: 30px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%); padding: 20px 50px; border-radius: 60px; border: 3px solid #fff; display: inline-block; }
-          </style>
-          <div id='res-overlay'>
-            <div class='premium-label'>★ {region} No.1 정보 ★</div>
-            <h1 class='main-title'>{region} {keyword}<br><span style='color:#ffff00;'>PREMIUM</span></h1>
-            <div class='status-box'>
-              <p style='color:#ff66ff; font-size:18px;'>기준: 2026년 03월 25일(수)</p>
-              <p style='font-size:24px; font-weight:900;'>✨ 현재 정상 영업중 ✨</p>
-            </div>
-            <a href='tel:010-0000-0000' class='cta-button'>📞 전화 즉시 연결</a>
-          </div>
-          """
+            # <body> 태그 바로 아래에 형님 소스코드 때려박기
+            sed -i "/<body[^>]*>/a \
+            <style> \
+              @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'); \
+              #res-overlay { width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop'); background-size: cover; background-position: center; font-family: 'Pretendard', sans-serif; color: white; text-align: center; position: relative; z-index: 9999; } \
+              .premium-label { font-size: 24px; color: #ff00ff; margin-bottom: 15px; text-shadow: 0 0 8px #ff00ff; } \
+              .main-title { font-size: 60px; font-weight: 700; color: #fff; margin-bottom: 25px; } \
+              .status-box { background: rgba(0,0,0,0.8); border: 2px solid #fff; padding: 20px; border-radius: 12px; margin-bottom: 35px; } \
+              .cta-button { text-decoration: none; font-size: 30px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%); padding: 20px 50px; border-radius: 60px; border: 3px solid #fff; display: inline-block; } \
+            </style> \
+            <div id='res-overlay'> \
+              <div class='premium-label'>★ $REGION No.1 정보 ★</div> \
+              <h1 class='main-title'>$REGION $KEYWORD<br><span style='color:#ffff00;'>PREMIUM</span></h1> \
+              <div class='status-box'> \
+                <p style='color:#ff66ff;'>기준: 2026년 03월 25일(수)</p> \
+                <p style='font-size:24px; font-weight:900;'>✨ 현재 정상 영업중 ✨</p> \
+              </div> \
+              <a href='tel:010-0000-0000' class='cta-button'>📞 전화 즉시 예약</a> \
+            </div>" "$file"
+          done
 
-          files = glob.glob("**/*.html", recursive=True)
-          for f_path in files:
-              try:
-                  with open(f_path, 'r', encoding='utf-8') as f:
-                      content = f.read()
-                  
-                  if "res-overlay" in content: continue
-                  
-                  fname = os.path.basename(f_path).replace(".html", "")
-                  parts = fname.split('_')
-                  r = parts[0] if len(parts) > 0 else "전국"
-                  k = parts[1] if len(parts) > 1 else "가라오케"
-
-                  # <body> 바로 뒤에 삽입 ㅡㅡ
-                  final_overlay = overlay_html.format(region=r, keyword=k)
-                  if "<body>" in content:
-                      new_content = content.replace("<body>", f"<body>{final_overlay}", 1)
-                      with open(f_path, 'w', encoding='utf-8') as f:
-                          f.write(new_content)
-              except:
-                  continue
-
-      - name: Push Changes
+      - name: Push
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions"
+          git config --global user.email "action@github.com"
           git add .
-          git commit -m "Fixed all syntax errors" || exit 0
+          git commit -m "Insert Overlay" || exit 0
           git push

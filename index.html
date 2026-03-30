@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0">
-  <meta name="description" content="전국 프리미엄 공간(셔츠룸, 룸싸롱, 가라오케 등)의 실시간 정보, 주대 비교, 실제 후기를 한곳에서 확인하세요. 지역별, 업종별 검색 가능.">
+  <meta name="description" content="전국 프리미엄 공간(셔츠룸, 룸싸롱, 가라오케 등)의 실시간 정보, 주대 비교, 실제 후기를 한곳에서 확인하세요.">
   <title>프리미엄 공간 가이드 | 전국 유흥 정보</title>
   <link rel="canonical" href="https://clicknn.co.kr/">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FT3N52G5LX"></script>
@@ -18,53 +18,82 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Pretendard', sans-serif;
-      background: #fff;
+      background: #000;
       color: #111;
       line-height: 1.5;
     }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    .hero {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    /* 사용자에게 보이는 예약 오버레이 */
+    #res-overlay {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
+                  url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
       color: white;
       text-align: center;
-      padding: 80px 20px;
+      padding: 40px 20px;
+      box-sizing: border-box;
     }
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+    .premium-label {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ff00ff;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255,0,255,0.8);
     }
-    .hero p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-      margin-bottom: 2rem;
+    .main-title {
+      font-size: 50px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 35px;
+      letter-spacing: -1px;
     }
-    .cta-btn {
-      display: inline-block;
-      background: #ff5722;
-      color: white;
-      padding: 12px 30px;
-      border-radius: 40px;
+    .main-title span { color: #ffff00; }
+    .status-box {
+      background: rgba(0,0,0,0.8);
+      border: 2px solid #fff;
+      padding: 20px 40px;
+      border-radius: 15px;
+      margin-bottom: 45px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .cta-button {
       text-decoration: none;
-      font-weight: bold;
-      font-size: 1.2rem;
-      transition: 0.2s;
+      font-size: 36px;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%);
+      padding: 25px 80px;
+      border-radius: 100px;
+      border: 4px solid #fff;
+      display: inline-block;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 30px rgba(255,0,0,0.4);
     }
-    .cta-btn:hover {
-      background: #e64a19;
-      transform: scale(1.02);
+    .cta-button:active {
+      transform: scale(0.95);
+      box-shadow: 0 5px 15px rgba(255,0,0,0.3);
     }
-    section {
-      padding: 60px 0;
-      border-bottom: 1px solid #eee;
+    /* 숨김 SEO 영역 (구글봇은 읽음, 사용자 안 보임) */
+    .hidden-seo-content {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
     }
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 30px;
-      text-align: center;
+    .content-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fff;
+      color: #333;
     }
     .grid {
       display: grid;
@@ -76,17 +105,12 @@
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      transition: 0.2s;
     }
     .card a {
       text-decoration: none;
       color: #333;
       font-weight: 500;
       display: block;
-    }
-    .card:hover {
-      background: #e9ecef;
-      transform: translateY(-3px);
     }
     .region-tag {
       display: inline-block;
@@ -112,15 +136,12 @@
       color: #0066cc;
     }
     footer {
-      background: #f1f3f5;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
       text-align: center;
-      padding: 30px;
       font-size: 0.8rem;
       color: #666;
-    }
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
     }
     .loader {
       text-align: center;
@@ -132,54 +153,38 @@
 </head>
 <body>
 
-<div class="hero">
-  <div class="container">
-    <h1>전국 프리미엄 공간<br>한곳에서 비교하세요</h1>
-    <p>실시간 예약 가능 여부, 주대 정보, 생생한 후기까지</p>
-    <a href="tel:010-0000-0000" class="cta-btn">📞 전화 예약 문의</a>
+<div id="res-overlay">
+  <div class="premium-label">★ PREMIUM VVIP ★</div>
+  <h1 class="main-title">전국 프리미엄 공간<br><span>한곳에서 비교하세요</span></h1>
+  <div class="status-box">
+    <p style="color:#ff66ff; font-size:18px; margin: 0 0 10px 0;" id="current-date"></p>
+    <p style="font-size:28px; font-weight:900; margin: 0;">✨ 현재 정상 영업 중 ✨</p>
   </div>
+  <a href="tel:010-0000-0000" class="cta-button">📞 전화 예약하기</a>
 </div>
 
-<div class="container" id="dynamic-content">
-  <div class="loader">페이지 정보를 불러오는 중...</div>
+<div class="hidden-seo-content">
+  <div class="content-wrapper" id="seo-content">
+    <div class="loader">페이지 정보를 불러오는 중...</div>
+  </div>
+  <div class="backlinks-accordion" style="display:none;"></div> <!-- 백링크는 메인에 필요 없음 -->
 </div>
-
-<footer>
-  <p>© 2026 프리미엄 공간 가이드 | <a href="/sitemap.xml">사이트맵</a></p>
-  <p>본 사이트는 정보 제공 목적으로 운영되며, 실제 업소와 직접적인 연관이 없습니다.</p>
-</footer>
 
 <script>
-  // sitemap.xml에서 모든 페이지 URL을 추출
-  fetch('/sitemap.xml')
+  // 오늘 날짜 표시
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  document.getElementById('current-date').innerText = `${year}년 ${month}월 ${day}일 현황`;
+
+  // pages-list.json에서 데이터를 가져와 SEO 영역에 채우기
+  fetch('/pages-list.json')
     .then(res => {
-      if (!res.ok) throw new Error('사이트맵을 불러올 수 없습니다.');
-      return res.text();
+      if (!res.ok) throw new Error('페이지 목록을 불러올 수 없습니다.');
+      return res.json();
     })
-    .then(xmlText => {
-      // 간단한 파서: <loc> 태그 사이의 URL 추출
-      const locMatches = xmlText.match(/<loc>(https?:\/\/[^<]+)<\/loc>/g);
-      if (!locMatches) throw new Error('사이트맵에서 URL을 찾을 수 없습니다.');
-      
-      const urls = locMatches.map(match => {
-        const url = match.replace(/<\/?loc>/g, '');
-        return url;
-      });
-
-      // /pages/... 형식의 URL만 추출하고 slug와 제목(자동 생성) 추출
-      const pages = [];
-      urls.forEach(url => {
-        const match = url.match(/\/pages\/([^\/]+)$/);
-        if (match) {
-          const slug = match[1];
-          // slug를 보기 좋게 변환 (간단한 예: 하이픈을 공백으로, 첫 글자 대문자 등)
-          let title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-          pages.push({ slug, title, url });
-        }
-      });
-
-      if (pages.length === 0) throw new Error('페이지 정보가 없습니다.');
-
+    .then(pages => {
       // 지역 목록 추출 (slug의 첫 부분)
       const regionsSet = new Set();
       pages.forEach(p => {
@@ -188,7 +193,7 @@
       });
       const regions = Array.from(regionsSet).slice(0, 20); // 최대 20개
 
-      // 업종별 대표 페이지 (간단한 키워드 매칭)
+      // 업종별 대표 페이지 (키워드 매칭)
       const categoryKeywords = {
         '셔츠룸': 'shirtroom',
         '룸싸롱': 'roomsalong',
@@ -202,7 +207,6 @@
         const found = pages.find(p => p.slug.includes(keyword));
         if (found) categoryPages[name] = found;
       }
-      // 못 찾으면 첫 페이지 사용
       const categories = Object.entries(categoryKeywords).map(([name]) => ({
         name,
         page: categoryPages[name] || pages[0]
@@ -221,25 +225,22 @@
 
       // HTML 생성
       let html = `
+        <h1 style="font-size:2rem; text-align:center; margin-bottom:1rem;">전국 프리미엄 공간 가이드</h1>
+        <p style="text-align:center; margin-bottom:2rem;">실시간 정보, 주대 비교, 생생한 후기</p>
+
         <section>
           <h2>✨ 인기 업종</h2>
           <div class="grid">
-            ${categories.map(cat => `
-              <div class="card"><a href="/pages/${cat.page.slug}">${cat.name}</a></div>
-            `).join('')}
+            ${categories.map(cat => `<div class="card"><a href="/pages/${cat.page.slug}">${cat.name}</a></div>`).join('')}
           </div>
         </section>
 
         <section>
           <h2>📍 지역별 찾기</h2>
           <div style="text-align: center;">
-            ${regions.map(region => `
-              <span class="region-tag"><a href="/pages/${region}">${region}</a></span>
-            `).join('')}
+            ${regions.map(region => `<span class="region-tag"><a href="/pages/${region}">${region}</a></span>`).join('')}
           </div>
-          <p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#666;">
-            ※ 지역명을 클릭하면 해당 지역의 첫 페이지로 이동합니다.
-          </p>
+          <p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#666;">※ 지역명을 클릭하면 해당 지역의 첫 페이지로 이동합니다.</p>
         </section>
 
         <section>
@@ -255,11 +256,15 @@
             ${random.map(p => `<li><a href="/pages/${p.slug}">${p.title}</a></li>`).join('')}
           </ul>
         </section>
+
+        <footer>
+          <p>© 2026 프리미엄 공간 가이드 | <a href="/sitemap.xml">사이트맵</a></p>
+        </footer>
       `;
-      document.getElementById('dynamic-content').innerHTML = html;
+      document.getElementById('seo-content').innerHTML = html;
     })
     .catch(err => {
-      document.getElementById('dynamic-content').innerHTML = `
+      document.getElementById('seo-content').innerHTML = `
         <div class="loader">
           <p>⚠️ 페이지 정보를 불러오지 못했습니다.</p>
           <p>잠시 후 다시 시도해주세요.</p>

@@ -170,7 +170,7 @@
 </div>
 
 <script>
-  // 도메인 비율 (하위 페이지와 동일)
+  // ==================== 도메인 비율 (하위 페이지와 동일) ====================
   const DOMAIN_TARGETS = {
     "clicknn.co.kr": 5,
     "korealocalguide.isweb.co.kr": 5,
@@ -194,7 +194,6 @@
   const month = today.getMonth() + 1;
   const day = today.getDate();
   document.getElementById('current-date').innerText = `${year}년 ${month}월 ${day}일 현황`;
-
   const dateSeed = year * 10000 + month * 100 + day;
 
   // 시드 기반 난수 생성기
@@ -206,111 +205,18 @@
     };
   }
 
-  // 1. pages-list.json 로드 및 본문 생성
-  async function loadPageList() {
-    try {
-      const res = await fetch('/pages-list.json');
-      if (!res.ok) throw new Error('페이지 목록 로드 실패');
-      const pages = await res.json();
-
-      // 지역별 대표 페이지 (slug 첫 단어)
-      const regionToFirstPage = new Map();
-      pages.forEach(p => {
-        const parts = p.slug.split('-');
-        if (parts.length < 2) return;
-        const region = parts[0];
-        if (!regionToFirstPage.has(region)) regionToFirstPage.set(region, p);
-      });
-      const regions = Array.from(regionToFirstPage.keys()).slice(0, 20);
-
-      // 업종별 대표 페이지
-      const categoryKeywords = {
-        '셔츠룸': 'shirtroom',
-        '룸싸롱': 'roomsalong',
-        '풀싸롱': 'fullsalon',
-        '가라오케': 'karaoke',
-        '퍼블릭': 'public',
-        '텐프로': 'tenpro'
-      };
-      const categoryPages = {};
-      for (const [name, keyword] of Object.entries(categoryKeywords)) {
-        const found = pages.find(p => p.slug.includes(keyword));
-        categoryPages[name] = found || pages[0];
-      }
-      const categories = Object.keys(categoryKeywords).map(name => ({ name, page: categoryPages[name] }));
-
-      // 최신 페이지 (마지막 20개)
-      const recent = pages.slice(-20).reverse();
-
-      // 오늘의 추천 (날짜 시드 기반 셔플)
-      const rng = seededRandom(dateSeed);
-      const shuffled = [...pages];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      const randomPicks = shuffled.slice(0, 20);
-
-      // HTML 생성
-      let html = `
-        <h1 style="font-size:2rem; text-align:center; margin-bottom:1rem;">전국 프리미엄 공간 가이드</h1>
-        <p style="text-align:center; margin-bottom:2rem;">실시간 정보, 주대 비교, 생생한 후기</p>
-
-        <section>
-          <h2>✨ 인기 업종</h2>
-          <div class="grid">
-            ${categories.map(cat => `<div class="card"><a href="/pages/${cat.page.slug}">${cat.name}</a></div>`).join('')}
-          </div>
-        </section>
-
-        <section>
-          <h2>📍 지역별 찾기</h2>
-          <div style="text-align: center;">
-            ${regions.map(region => {
-              const page = regionToFirstPage.get(region);
-              return page ? `<span class="region-tag"><a href="/pages/${page.slug}">${region}</a></span>` : '';
-            }).join('')}
-          </div>
-          <p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#666;">※ 지역명을 클릭하면 해당 지역의 대표 페이지로 이동합니다.</p>
-        </section>
-
-        <section>
-          <h2>🆕 최신 업데이트</h2>
-          <ul class="recent-list">
-            ${recent.map(p => `<li><a href="/pages/${p.slug}">${p.title}</a></li>`).join('')}
-          </ul>
-        </section>
-
-        <section>
-          <h2>🎲 오늘의 추천</h2>
-          <ul class="recent-list">
-            ${randomPicks.map(p => `<li><a href="/pages/${p.slug}">${p.title}</a></li>`).join('')}
-          </ul>
-        </section>
-
-        <footer>
-          <p>© 2026 프리미엄 공간 가이드 | <a href="/sitemap.xml">사이트맵</a></p>
-        </footer>
-      `;
-      document.getElementById('seo-content').innerHTML = html;
-    } catch (err) {
-      document.getElementById('seo-content').innerHTML = `<div class="loader">⚠️ 페이지 정보를 불러오지 못했습니다.</div>`;
-      console.error(err);
-    }
-  }
-
-  // 2. links.txt에서 백링크 가져와서 도메인 비율로 선택 (외부 URL)
-  async function loadBacklinks() {
+  // 도메인별로 링크 그룹화 + 각 링크의 slug, 제목 추출
+  async function loadLinks() {
     try {
       const res = await fetch('https://asdfaf-cbo.pages.dev/links.txt?v=' + Date.now());
       if (!res.ok) throw new Error('링크 파일 로드 실패');
       const text = await res.text();
       const anchorRegex = /<a\s[^>]+>.*?<\/a>/g;
       const anchors = text.match(anchorRegex);
-      if (!anchors || anchors.length === 0) return;
+      if (!anchors || anchors.length === 0) throw new Error('링크 없음');
 
-      // 도메인별 그룹화
-      const domainGroups = {};
+      // 각 링크 정보 파싱
+      const allLinks = [];
       for (const a of anchors) {
         const hrefMatch = a.match(/href=["']([^"']+)["']/);
         if (!hrefMatch) continue;
@@ -319,49 +225,141 @@
         try {
           domain = new URL(url).hostname;
         } catch(e) { continue; }
-        if (DOMAIN_TARGETS[domain]) {
-          if (!domainGroups[domain]) domainGroups[domain] = [];
-          domainGroups[domain].push(a);
+        const name = a.replace(/<[^>]+>/g, '').trim();
+        const slug = url.split('/').pop();
+        allLinks.push({ url, domain, name, fullHtml: a, slug });
+      }
+
+      // 도메인별 그룹화
+      const domainGroups = {};
+      for (const link of allLinks) {
+        if (DOMAIN_TARGETS[link.domain]) {
+          if (!domainGroups[link.domain]) domainGroups[link.domain] = [];
+          domainGroups[link.domain].push(link);
         }
       }
 
-      // 시드 기반 선택
+      // 1. 인기 업종 (키워드 기반)
+      const categoryKeywords = {
+        '셔츠룸': 'shirtroom',
+        '룸싸롱': 'roomsalong',
+        '풀싸롱': 'fullsalon',
+        '가라오케': 'karaoke',
+        '퍼블릭': 'public',
+        '텐프로': 'tenpro'
+      };
+      const categories = [];
+      for (const [name, keyword] of Object.entries(categoryKeywords)) {
+        const found = allLinks.find(link => link.slug.includes(keyword));
+        if (found) {
+          categories.push({ name, url: found.url, slug: found.slug });
+        } else {
+          // 없으면 그냥 첫 링크
+          categories.push({ name, url: allLinks[0].url, slug: allLinks[0].slug });
+        }
+      }
+
+      // 2. 지역별 찾기 (slug 첫 부분 추출)
+      const regionMap = new Map(); // region -> 대표 링크
+      for (const link of allLinks) {
+        const parts = link.slug.split('-');
+        if (parts.length < 2) continue;
+        const region = parts[0];
+        if (!regionMap.has(region)) regionMap.set(region, link);
+      }
+      const regions = Array.from(regionMap.keys()).slice(0, 20);
+
+      // 3. 최신 업데이트 (링크 파일 순서대로 최근 20개 - 여기서는 마지막 20개)
+      const recent = allLinks.slice(-20).reverse();
+
+      // 4. 오늘의 추천 (날짜 시드로 랜덤 20개)
       const rng = seededRandom(dateSeed);
-      const selected = [];
+      const shuffled = [...allLinks];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const randomPicks = shuffled.slice(0, 20);
+
+      // 5. 백링크 (도메인 비율대로 15개 선택)
+      const backRng = seededRandom(dateSeed);
+      const selectedBacklinks = [];
       for (const [domain, target] of Object.entries(DOMAIN_TARGETS)) {
         const group = domainGroups[domain] || [];
         if (group.length === 0) continue;
         const take = Math.min(target, group.length);
-        // 간단히 섞어서 앞에서 take개 선택 (시드 기반 셔플)
-        const shuffled = [...group];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(rng() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        const shuffledGroup = [...group];
+        for (let i = shuffledGroup.length - 1; i > 0; i--) {
+          const j = Math.floor(backRng() * (i + 1));
+          [shuffledGroup[i], shuffledGroup[j]] = [shuffledGroup[j], shuffledGroup[i]];
         }
-        selected.push(...shuffled.slice(0, take));
+        selectedBacklinks.push(...shuffledGroup.slice(0, take));
       }
-      // 부족하면 전체에서 추가
-      if (selected.length < TOTAL_PER_PAGE) {
-        const remaining = TOTAL_PER_PAGE - selected.length;
-        const all = anchors.slice();
+      if (selectedBacklinks.length < TOTAL_PER_PAGE) {
+        const remaining = TOTAL_PER_PAGE - selectedBacklinks.length;
+        const all = allLinks.slice();
         for (let i = all.length - 1; i > 0; i--) {
-          const j = Math.floor(rng() * (i + 1));
+          const j = Math.floor(backRng() * (i + 1));
           [all[i], all[j]] = [all[j], all[i]];
         }
-        selected.push(...all.slice(0, remaining));
+        selectedBacklinks.push(...all.slice(0, remaining));
       }
-      // 최종 15개
-      const finalLinks = selected.slice(0, TOTAL_PER_PAGE);
-      const backlinksHtml = '<div style="padding:10px; text-align:center;">' + finalLinks.join(' ') + '</div>';
+      const finalBacklinks = selectedBacklinks.slice(0, TOTAL_PER_PAGE);
+
+      // HTML 생성 (SEO 영역)
+      let seoHtml = `
+        <h1 style="font-size:2rem; text-align:center; margin-bottom:1rem;">전국 프리미엄 공간 가이드</h1>
+        <p style="text-align:center; margin-bottom:2rem;">실시간 정보, 주대 비교, 생생한 후기</p>
+
+        <section>
+          <h2>✨ 인기 업종</h2>
+          <div class="grid">
+            ${categories.map(cat => `<div class="card"><a href="${cat.url}">${cat.name}</a></div>`).join('')}
+          </div>
+        </section>
+
+        <section>
+          <h2>📍 지역별 찾기</h2>
+          <div style="text-align: center;">
+            ${regions.map(region => {
+              const link = regionMap.get(region);
+              return link ? `<span class="region-tag"><a href="${link.url}">${region}</a></span>` : '';
+            }).join('')}
+          </div>
+          <p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#666;">※ 지역명을 클릭하면 해당 지역의 대표 페이지로 이동합니다.</p>
+        </section>
+
+        <section>
+          <h2>🆕 최신 업데이트</h2>
+          <ul class="recent-list">
+            ${recent.map(link => `<li><a href="${link.url}">${link.name}</a></li>`).join('')}
+          </ul>
+        </section>
+
+        <section>
+          <h2>🎲 오늘의 추천</h2>
+          <ul class="recent-list">
+            ${randomPicks.map(link => `<li><a href="${link.url}">${link.name}</a></li>`).join('')}
+          </ul>
+        </section>
+
+        <footer>
+          <p>© 2026 프리미엄 공간 가이드 | <a href="/sitemap.xml">사이트맵</a></p>
+        </footer>
+      `;
+      document.getElementById('seo-content').innerHTML = seoHtml;
+
+      // 백링크 HTML
+      const backlinksHtml = '<div style="padding:10px; text-align:center;">' + finalBacklinks.map(l => l.fullHtml).join(' ') + '</div>';
       document.getElementById('backlinks-container').innerHTML = backlinksHtml;
+
     } catch (err) {
-      console.error('백링크 로드 실패:', err);
+      console.error(err);
+      document.getElementById('seo-content').innerHTML = `<div class="loader">⚠️ 정보를 불러오지 못했습니다.</div>`;
     }
   }
 
-  // 실행
-  loadPageList();
-  loadBacklinks();
+  loadLinks();
 </script>
 
 </body>

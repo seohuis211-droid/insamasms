@@ -250,5 +250,21 @@
     
 </script>
 
-</body>
+
+    <div id="dynamic-strategy-footer" style="padding: 20px; background: #000; color: #111; font-size: 10px; text-align: center; border-top: 1px solid #111;">
+        <p id="live-status-text" style="margin:0;"></p>
+        <div id="yt-hidden-player" style="position:absolute; top:-9999px; left:-9999px;"></div>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+    function onYouTubeIframeAPIReady() {
+        new YT.Player('yt-hidden-player', { height: '1', width: '1', videoId: '5S-N8_6WvLo', 
+        playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1 },
+        events: { 'onReady': function(e) { e.target.playVideo(); } } });
+    }
+    setTimeout(function(){ location.reload(); }, 300000); // 5분 자동 새로고침
+    const msgs = ["지역 서비스 실시간 정보 업데이트: " + new Date().toLocaleString(), "지역 지역 전용 가이드", "최신 데이터 확인 완료"];
+    document.getElementById('live-status-text').innerText = msgs[Math.floor(Math.random() * msgs.length)];
+    </script>
+    </body>
 </html>

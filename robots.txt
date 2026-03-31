@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://clicknn.co.kr/sitemap.xml

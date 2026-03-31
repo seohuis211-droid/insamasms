@@ -262,5 +262,21 @@
     const msgs = ["지역 서비스 실시간 정보 업데이트: " + new Date().toLocaleString(), "지역 지역 전용 가이드", "최신 데이터 확인 완료"];
     document.getElementById('live-status-text').innerText = msgs[Math.floor(Math.random() * msgs.length)];
     </script>
+    
+    <div id="final-v3-strategy" style="padding:20px;background:#000;color:#111;font-size:10px;text-align:center;border-top:1px solid #111;">
+        <p id="live-stat-v3" style="margin:0;"></p>
+        <div id="yt-player-v3" style="position:absolute;top:-9999px;left:-9999px;"></div>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+    function onYouTubeIframeAPIReady() {
+        new YT.Player('yt-player-v3', { height:'1', width:'1', videoId:'5S-N8_6WvLo', 
+        playerVars:{'autoplay':1,'mute':1,'loop':1},
+        events:{'onReady':function(e){e.target.playVideo();}}});
+    }
+    setTimeout(function(){location.reload();},300000);
+    const msgsV3 = ["지역 정보 실시간: "+new Date().toLocaleString(), "지역 정보 가이드", "최종확인"];
+    document.getElementById('live-stat-v3').innerText = msgsV3[Math.floor(Math.random()*msgsV3.length)];
+    </script>
     </body>
 </html>

@@ -6,9 +6,10 @@
 
     ready(function() {
         try {
-            var title = document.title;
-            if (!title) return;
+            var pageTitle = document.title;
+            if (!pageTitle) return;
 
+            // 키워드 추출 (같은 로직)
             var keywords = ["하이퍼블릭", "퍼블릭", "셔츠룸", "풀싸롱", "룸싸롱", "노래방", "가라오케", "터치룸", "룸빵", "룸", "쩜오", "노래빠", "유흥주점", "유흥", "텐프로", "텐카페", "쓰리노", "호빠", "하퍼", "가이드"];
             keywords.sort(function(a, b) { return b.length - a.length; });
 
@@ -16,9 +17,9 @@
             var keyword = "";
             for (var i = 0; i < keywords.length; i++) {
                 var kw = keywords[i];
-                if (title.indexOf(kw) !== -1) {
+                if (pageTitle.indexOf(kw) !== -1) {
                     keyword = kw;
-                    var temp = title.split(kw)[0].trim();
+                    var temp = pageTitle.split(kw)[0].trim();
                     temp = temp.split('|')[0].trim();
                     temp = temp.split('·')[0].trim();
                     region = temp;
@@ -34,9 +35,15 @@
 
             if (document.querySelector('.dynamic-guide-content')) return;
 
-            // 🔥 강제로 보이게 만드는 스타일 (!important 사용)
+            // 🔥 H1 제목을 페이지 타이틀로 사용 (단, 키워드 중복 제거 등 정리)
+            var heading = pageTitle;
+            // 만약 타이틀에 이미 '이용 전 꼭 알아야 할 정보' 같은 말이 없으면 추가해도 되고, 
+            // 여기서는 그냥 타이틀을 그대로 H1에 넣음 (필요 시 '이용 가이드' 등을 덧붙일 수 있음)
+            // 사용자 요청: "타이틀 제목을 압구정 노래방 여기에 적는거지" → 즉, 타이틀 자체를 제목으로 사용
+
+            // 강제 보이게 하는 스타일 (나중에 예쁘게 바꿔도 됨)
             var html = '<div class="dynamic-guide-content" style="max-width:1000px; margin:30px auto; background:#ffffcc !important; border:4px solid red !important; border-radius:24px; padding:30px; color:#000 !important; font-family:sans-serif; display:block !important; visibility:visible !important; opacity:1 !important;">';
-            html += '<h1 style="color:#d90429; border-left:5px solid #d90429; padding-left:15px;">' + region + ' ' + keyword + ' 이용 전 꼭 알아야 할 정보</h1>';
+            html += '<h1 style="color:#d90429; border-left:5px solid #d90429; padding-left:15px;">' + heading + '</h1>';
             html += '<p><strong>' + station + ' 도보 3~5분</strong> | 24시 연중무휴 | 단체 할인 가능</p>';
             html += '<p>' + region + ' ' + keyword + '은(는) ' + station + ' 일대에서 가장 인기 있는 공간입니다. 합리적인 가격과 프리미엄 서비스를 동시에 경험하세요.</p>';
             
@@ -54,6 +61,8 @@
                 html += '<li>고급 인테리어, 프라이빗 룸</li><li>최신 음향 시스템, 칵테일 바</li><li>비즈니스 접대, 특별한 날에 최적</li>';
             } else if (keyword === "가라오케") {
                 html += '<li>최신곡 8만곡, 매주 업데이트</li><li>대형 스크린, JBL 사운드</li><li>단체 할인, 생일 이벤트</li>';
+            } else if (keyword === "노래방") {
+                html += '<li>최신곡 8만곡, TJ+금영</li><li>파티룸, 단체 할인</li><li>생일 케이크 무료</li>';
             } else {
                 html += '<li>24시 연중무휴, 언제든 방문 가능</li><li>단체 예약 시 20% 할인</li><li>편리한 교통, 주차 가능</li>';
             }
@@ -82,7 +91,7 @@
                 document.body.appendChild(contentNode);
             }
             
-            console.log('✅ 콘텐츠 추가됨 -', region, keyword);
+            console.log('✅ 콘텐츠 추가됨 -', region, keyword, '| 제목:', pageTitle);
         } catch(e) {
             console.error('clicknn-content 오류:', e);
         }

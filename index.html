@@ -27,16 +27,12 @@
         .filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 10px; }
         .filter-btn { background: #e9ecef; border: none; padding: 6px 14px; border-radius: 40px; cursor: pointer; font-size: 0.8rem; }
         .filter-btn.active, .filter-btn:hover { background: #1a4a6f; color: white; }
-        /* 겹침 해결: column-count 대신 grid 사용 */
         .link-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 20px; }
         .link-list a { display: block; padding: 6px 0; color: #1e6f9f; text-decoration: none; font-size: 0.85rem; word-break: break-all; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         .floating-call { position: fixed; bottom: 20px; right: 20px; background: #ff0000; color: white; border-radius: 50px; padding: 14px 24px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; }
         .floating-call:hover { background: #cc0000; }
-        .update-content { line-height: 1.6; }
-        .update-content img { max-width: 100%; height: auto; }
-        /* updates.html의 헤더/푸터/중복 요소 숨김 */
-        .update-content .header, .update-content .hero, .update-content .footer, 
-        .update-content > div > .header, .update-content .container > .header { display: none; }
+        .update-button { display: inline-block; background: #1a4a6f; color: white; padding: 12px 24px; border-radius: 40px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        .update-button:hover { background: #0b2b3b; }
         @media (max-width: 768px) { .link-list { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -48,7 +44,6 @@
         <div class="sub">실시간 정보, 주대 비교, 생생한 후기 | clicknn.co.kr</div>
     </header>
 
-    <!-- 메인 SEO 본문 -->
     <div class="intro-text">
         <strong>clicknn.co.kr</strong>은 전국 16개 업종, 50개 이상의 주요 지역에 걸친 프리미엄 유흥 공간의 <strong>실시간 주대 정보</strong>와 <strong>이용자 후기</strong>를 비교할 수 있는 대한민국 No.1 통합 허브입니다. 강남, 서초, 신논현, 역삼, 선릉, 잠실, 홍대, 수원, 인천, 부천, 일산, 분당, 동탄 등 지역별 맞춤 정보부터 가라오케·룸싸롱·하이퍼블릭·텐프로·호빠 등 업종별 상세 비교까지 — <strong>2026년 4월 10일 기준</strong> 최신 데이터로 업데이트되었습니다.
         <ul>
@@ -59,33 +54,33 @@
         </ul>
     </div>
 
-    <!-- 업종별 카테고리 (링크는 /pages/xxx.html - 네가 원하는 대로 수정 가능) -->
+    <!-- 업종별 카테고리 -->
     <div class="card">
         <h3>📂 업종별 카테고리</h3>
-        <div class="card-desc">전국 프리미엄 공간을 업종별로 한눈에 비교하세요. 가격, 위치, 후기까지 실시간 확인 가능합니다.</div>
+        <div class="card-desc">전국 프리미엄 공간을 업종별로 한눈에 비교하세요.</div>
         <div class="category-links" id="industryLinks"></div>
     </div>
 
-    <!-- 지역별 카테고리 -->
+    <!-- 지역별 카테고리 (/categories/region_가락동.html 형식) -->
     <div class="card">
         <h3>📍 지역별 카테고리</h3>
-        <div class="card-desc">강남·홍대·수원·인천 등 지역별 최신 업소 정보와 주대를 비교해보세요.</div>
+        <div class="card-desc">강남·홍대·수원·인천 등 지역별 최신 업소 정보</div>
         <div class="region-grid" id="regionGrid"></div>
     </div>
 
-    <!-- 업데이트 소식 (updates.html에서 리스트 영역만 추출) -->
+    <!-- 업데이트 소식 - 버튼 클릭시 updates.html로 이동 -->
     <div class="card">
         <h3>📝 업데이트 소식</h3>
         <div class="card-desc">매일 업데이트되는 신규 업소, 할인 정보, 주대 변동 내역입니다.</div>
-        <div id="updateContent" class="update-content">로딩 중...</div>
+        <a href="/updates.html" class="update-button">📢 최신 업데이트 보기 →</a>
     </div>
 
     <!-- 검색 및 필터 -->
     <div class="card">
         <h3>🔍 업소 검색</h3>
-        <div class="card-desc">원하는 업종 또는 지역을 검색하세요. 실시간 필터링으로 빠르게 찾을 수 있습니다.</div>
+        <div class="card-desc">원하는 업종 또는 지역을 검색하세요.</div>
         <div class="search-section">
-            <input type="text" id="searchInput" placeholder="예: 강남 가라오케, 홍대 셔츠룸" onkeyup="filterLinks()">
+            <input type="text" id="searchInput" placeholder="예: 강남 가라오케" onkeyup="filterLinks()">
             <div class="filter-tabs" id="filterTabs"></div>
         </div>
         <div class="link-list" id="recommendList"></div>
@@ -94,26 +89,26 @@
     <!-- 외부 추천 사이트 -->
     <div class="card">
         <h3>🔗 외부 추천 사이트</h3>
-        <div class="card-desc">전국 유흥 공간 관련 신뢰할 수 있는 외부 정보 사이트입니다.</div>
+        <div class="card-desc">신뢰할 수 있는 외부 정보 사이트입니다.</div>
         <div class="link-list" id="externalList"></div>
     </div>
 
     <!-- 제휴 사이트 -->
     <div class="card">
         <h3>🤝 제휴 사이트</h3>
-        <div class="card-desc">clicknn과 함께하는 공식 제휴 파트너입니다.</div>
+        <div class="card-desc">clicknn 공식 제휴 파트너</div>
         <div class="link-list" id="affiliateList"></div>
     </div>
 
     <footer style="text-align:center; margin-top:40px; padding:20px; color:#5c6f87;">
-        © clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a> | <a href="/privacy.html">개인정보처리방침</a>
+        © clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a>
     </footer>
 </div>
 
 <a href="tel:010-0000-0000" class="floating-call">📞 전화문의</a>
 
 <script>
-    // ================== 업종 및 지역 (고정 링크 - 필요시 수정) ==================
+    // ========== 업종별 (링크: /pages/업종명.html) ==========
     const industries = ["가라오케", "노래방", "룸싸롱", "풀싸롱", "셔츠룸", "하이퍼블릭", "퍼블릭", "터치룸", "텐프로", "텐카페", "일프로", "호빠", "노래빠", "쓰리노", "쩜오", "하퍼"];
     const industryDiv = document.getElementById('industryLinks');
     industries.forEach(ind => {
@@ -123,36 +118,18 @@
         industryDiv.appendChild(a);
     });
 
-    const regionMap = {
-        "gangnam": "강남", "seocho": "서초", "sinnonhyeon": "신논현", "yeoksam": "역삼", "nonhyeon": "논현",
-        "seolleung": "선릉", "jamsil": "잠실", "hongdae": "홍대", "sinchon": "신촌", "yeouido": "여의도",
-        "suwon": "수원", "bucheon": "부천", "incheon": "인천", "ilsan": "일산", "paju": "파주",
-        "yongin": "용인", "seongnam": "성남", "bundang": "분당", "goyang": "고양", "gimpo": "김포",
-        "uijeongbu": "의정부", "magok": "마곡", "balsan": "발산", "hwagok": "화곡", "kkachisan": "까치산",
-        "juan": "주안", "apgujeong": "압구정", "cheongdam": "청담", "sinsa": "신사",
-        "bangbae": "방배", "banpo": "반포", "dogok": "도곡", "daechidong": "대치동", "seokchon": "석촌",
-        "songpa": "송파", "garakdong": "가락동", "bangidong": "방이동", "bongcheondong": "봉천동", "sillim": "신림",
-        "wangsimni": "왕십리", "euljiro": "을지로", "dongmyo": "동묘", "chungmuro": "충무로", "gwanghwamun": "광화문",
-        "janghanpyeong": "장한평", "dapsimni": "답십리", "madu": "마두", "baekseok": "백석", "tanhyeon": "탄현",
-        "lapesta": "라페스타", "janghangdong": "장항동", "ingyedong": "인계동", "gwanggyo": "광교", "yeongtong": "영통",
-        "dongtan": "동탄", "maetandong": "매탄동", "maesandong": "매산동", "mangpodong": "망포동", "hyangnam": "향남",
-        "singaldong": "신갈동", "giheung": "기흥", "gunpo": "군포", "osan": "오산", "gwonseondong": "권선동",
-        "hwaseodong": "화서동", "beomgye": "범계", "geumgokdong": "금곡동", "seoul": "서울", "changdong": "창동",
-        "cheolsan": "철산", "nowon": "노원", "guri": "구리", "mapo": "마포", "idae": "이대", "dangsan": "당산",
-        "seodaemun": "서대문", "guuidong": "구의동", "jayangdong": "자양동", "gwangjin": "광진구", "dongdaemun": "동대문"
-    };
+    // ========== 지역별 (링크: /categories/region_지역명.html) ==========
+    const regionNames = ["강남", "서초", "신논현", "역삼", "논현", "선릉", "잠실", "홍대", "신촌", "여의도", "수원", "부천", "인천", "일산", "파주", "용인", "성남", "분당", "고양", "김포", "의정부", "마곡", "발산", "화곡", "까치산", "주안", "압구정", "청담", "신사", "방배", "반포", "도곡", "대치동", "석촌", "송파", "가락동", "방이동", "봉천동", "신림", "왕십리", "을지로", "동묘", "충무로", "광화문", "장한평", "답십리", "마두", "백석", "탄현", "라페스타", "장항동", "인계동", "광교", "영통", "동탄", "매탄동", "매산동", "망포동", "향남", "신갈동", "기흥", "군포", "오산", "권선동", "화서동", "범계", "금곡동", "서울", "창동", "철산", "노원", "구리", "마포", "이대", "당산", "서대문", "구의동", "자양동", "광진구", "동대문"];
     const regionGrid = document.getElementById('regionGrid');
-    const uniqueRegions = [...new Set(Object.values(regionMap))];
-    uniqueRegions.forEach(regionName => {
-        const span = document.createElement('span');
-        span.className = 'region-tag';
+    regionNames.forEach(regionName => {
         const a = document.createElement('a');
-        a.href = `/pages/region_${regionName}.html`;
+        a.href = `/categories/region_${regionName}.html`;
         a.textContent = regionName;
-        span.appendChild(a);
-        regionGrid.appendChild(span);
+        a.className = 'region-tag';
+        regionGrid.appendChild(a);
     });
 
+    // ========== 키워드 맵 (필터용) ==========
     const keywordMap = {
         "가라오케": "karaoke", "노래방": "noraebang", "룸싸롱": "roomsalong", "풀싸롱": "fullsalon",
         "셔츠룸": "shirtroom", "하이퍼블릭": "hyperpublic", "퍼블릭": "public", "터치룸": "touchroom",
@@ -168,7 +145,7 @@
         return text.trim().split(/\r?\n/).filter(line => line.trim() !== '');
     }
 
-    // ========== 날짜 기반 순환 (중복 없이 매일 다른 200개) ==========
+    // ========== 날짜 기반 순환 (매일 200개) ==========
     function getDailyItems(arr, itemsPerDay = 200) {
         if (!arr.length) return [];
         if (arr.length <= itemsPerDay) return [...arr];
@@ -183,58 +160,22 @@
         return result;
     }
 
-    // ========== 업데이트 소식: updates.html에서 리스트 영역만 추출 ==========
-    async function loadUpdates() {
-        try {
-            const res = await fetch('/updates.html?v=' + Date.now());
-            if (res.ok) {
-                let html = await res.text();
-                // 임시 div에 넣고 .list-area 또는 #updateList 내용만 추출
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                // updates.html의 구조: .list-area 또는 #updateList 를 찾음
-                let content = tempDiv.querySelector('.list-area, #updateList, .update-list');
-                if (content) {
-                    document.getElementById('updateContent').innerHTML = content.innerHTML;
-                } else {
-                    // 못 찾으면 body 내용에서 헤더/푸터 제거한 전체
-                    const bodyContent = tempDiv.querySelector('body') || tempDiv;
-                    const cloned = bodyContent.cloneNode(true);
-                    // 헤더/푸터/히어로 제거
-                    if (cloned.querySelector) {
-                        cloned.querySelectorAll('.header, .hero, footer, .footer, header').forEach(el => el.remove());
-                        document.getElementById('updateContent').innerHTML = cloned.innerHTML;
-                    } else {
-                        document.getElementById('updateContent').innerHTML = '<p>업데이트 소식이 없습니다.</p>';
-                    }
-                }
-            } else {
-                document.getElementById('updateContent').innerHTML = '<p>업데이트 소식이 없습니다.</p>';
-            }
-        } catch(e) {
-            document.getElementById('updateContent').innerHTML = '<p>업데이트 소식을 불러올 수 없습니다.</p>';
-        }
-    }
-
     // ========== 메인 실행 ==========
     (async function() {
-        // 내부 URL (urls.txt) - 이미 전체 URL이 들어있음, 그대로 사용
         const allInternal = await loadTxt('/urls.txt');
         const dailyInternal = getDailyItems(allInternal, 200);
         
-        // 외부 사이트 (external.txt)
         const allExternal = await loadTxt('/external.txt');
         const dailyExternal = getDailyItems(allExternal, 200);
         
-        // 제휴 사이트 (affiliate.txt) - 전체 고정
         const affiliateUrls = await loadTxt('/affiliate.txt');
 
-        // 내부 링크 표시
+        // 내부 링크 표시 (전체 URL 그대로 텍스트)
         const recommendDiv = document.getElementById('recommendList');
         dailyInternal.forEach(url => {
             const a = document.createElement('a');
             a.href = url;
-            a.textContent = url.split('/').pop();
+            a.textContent = url;  // 전체 URL 표시
             recommendDiv.appendChild(a);
         });
 
@@ -295,7 +236,7 @@
             filtered.forEach(url => {
                 const a = document.createElement('a');
                 a.href = url;
-                a.textContent = url.split('/').pop();
+                a.textContent = url;
                 container.appendChild(a);
             });
         }
@@ -306,9 +247,6 @@
             renderRecommend(searchVal, category);
         }
         renderRecommend();
-
-        // 업데이트 소식 로드
-        await loadUpdates();
     })();
 
     // 스키마 추가

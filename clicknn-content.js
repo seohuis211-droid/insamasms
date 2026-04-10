@@ -1,5 +1,4 @@
 (function() {
-    // DOM이 준비될 때까지 기다림
     function ready(fn) {
         if (document.readyState !== 'loading') fn();
         else document.addEventListener('DOMContentLoaded', fn);
@@ -7,39 +6,43 @@
 
     ready(function() {
         try {
-            var path = window.location.pathname;
-            var pageName = path.replace(/^\//, '').replace(/\/$/, '');
-            if (!pageName) {
-                console.log('clicknn-content: 페이지명 없음');
-                return;
-            }
+            // 1. 페이지 타이틀 가져오기 (SEO 최적화된 제목)
+            var title = document.title;
+            if (!title) return;
 
+            // 2. 키워드 목록 (긴 것부터 매칭)
             var keywords = ["하이퍼블릭", "퍼블릭", "셔츠룸", "풀싸롱", "룸싸롱", "노래방", "가라오케", "터치룸", "룸빵", "룸", "쩜오", "노래빠", "유흥주점", "유흥", "텐프로", "텐카페", "쓰리노", "호빠", "하퍼", "가이드"];
             keywords.sort(function(a, b) { return b.length - a.length; });
 
-            var region = pageName;
+            var region = "";
             var keyword = "";
             for (var i = 0; i < keywords.length; i++) {
                 var kw = keywords[i];
-                if (pageName.indexOf(kw) !== -1) {
+                if (title.indexOf(kw) !== -1) {
                     keyword = kw;
-                    region = pageName.substring(0, pageName.indexOf(kw));
+                    // 지역은 키워드 앞부분 (키워드 제거 후 공백 제거)
+                    var temp = title.split(kw)[0].trim();
+                    // "|" 나 "·" 같은 구분자가 있으면 그 앞부분만 취함
+                    temp = temp.split('|')[0].trim();
+                    temp = temp.split('·')[0].trim();
+                    region = temp;
                     break;
                 }
             }
             if (!keyword) {
-                console.log('clicknn-content: 키워드 없음 -', pageName);
+                console.log('clicknn-content: 타이틀에서 키워드 못 찾음 -', title);
                 return;
             }
+            if (!region) region = "해당 지역";
 
             var station = region + "역";
             var today = new Date();
             var dateStr = today.getFullYear() + "년 " + (today.getMonth()+1) + "월 " + today.getDate() + "일";
 
-            // 이미 추가된 콘텐츠가 있으면 중복 방지
+            // 중복 추가 방지
             if (document.querySelector('.dynamic-guide-content')) return;
 
-            // 콘텐츠 HTML 생성
+            // 3. 콘텐츠 HTML 생성 (키워드별 맞춤)
             var html = '<div class="dynamic-guide-content" style="max-width:1000px; margin:30px auto; background:#fff; border-radius:24px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.1); font-family:sans-serif;">';
             html += '<h1 style="color:#d90429; border-left:5px solid #d90429; padding-left:15px;">' + region + ' ' + keyword + ' 이용 전 꼭 알아야 할 정보</h1>';
             html += '<p><strong>' + station + ' 도보 3~5분</strong> | 24시 연중무휴 | 단체 할인 가능</p>';
@@ -75,7 +78,7 @@
             html += '<p style="font-size:0.8rem; color:#777;">© ' + region + ' ' + keyword + ' 정보 안내 가이드 - All Rights Reserved.</p>';
             html += '</div>';
 
-            // body 끝에 추가 (가장 확실한 방법)
+            // body 끝에 추가
             var wrapper = document.createElement('div');
             wrapper.innerHTML = html;
             document.body.appendChild(wrapper.firstChild);

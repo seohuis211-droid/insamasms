@@ -14,8 +14,12 @@
         header { background: linear-gradient(135deg, #0b2b3b, #1a4a6f); color: white; padding: 30px 25px; border-radius: 28px; margin-bottom: 30px; }
         h1 { font-size: 1.9rem; margin-bottom: 10px; }
         .sub { font-size: 1rem; opacity: 0.9; margin-top: 8px; }
+        .intro-text { background: #e8f0fe; padding: 20px; border-radius: 20px; margin-bottom: 30px; line-height: 1.7; color: #1e4663; }
+        .intro-text strong { color: #0b5e7e; }
+        .intro-text ul { margin-top: 12px; padding-left: 20px; }
         .card { background: white; border-radius: 24px; padding: 20px; margin-bottom: 30px; }
         .card h3 { margin-bottom: 15px; font-size: 1.2rem; border-left: 4px solid #1a4a6f; padding-left: 12px; }
+        .card-desc { font-size: 0.85rem; color: #5c6f87; margin-bottom: 12px; }
         .category-links, .region-grid { display: flex; flex-wrap: wrap; gap: 10px; }
         .category-links a, .region-tag a { background: #e9ecef; padding: 6px 14px; border-radius: 40px; text-decoration: none; color: #1e6f9f; font-size: 0.85rem; }
         .category-links a:hover, .region-tag a:hover { background: #1a4a6f; color: white; }
@@ -40,47 +44,66 @@
         <div class="sub">실시간 정보, 주대 비교, 생생한 후기 | clicknn.co.kr</div>
     </header>
 
+    <!-- ========== 글 내용 1: 메인 SEO 본문 (복원) ========== -->
+    <div class="intro-text">
+        <strong>clicknn.co.kr</strong>은 전국 16개 업종, 50개 이상의 주요 지역에 걸친 프리미엄 유흥 공간의 <strong>실시간 주대 정보</strong>와 <strong>이용자 후기</strong>를 비교할 수 있는 대한민국 No.1 통합 허브입니다. 강남, 서초, 신논현, 역삼, 선릉, 잠실, 홍대, 수원, 인천, 부천, 일산, 분당, 동탄 등 지역별 맞춤 정보부터 가라오케·룸싸롱·하이퍼블릭·텐프로·호빠 등 업종별 상세 비교까지 — <strong>2026년 4월 10일 기준</strong> 최신 데이터로 업데이트되었습니다.
+        <ul>
+            <li>✅ <strong>실시간 주대 비교</strong> – 업소별 기본 주대, 음료 가격, 예약 조건을 한눈에</li>
+            <li>✅ <strong>생생한 후기</strong> – 실제 방문객의 매너 평가, 시설 상태, 서비스 만족도</li>
+            <li>✅ <strong>지역/업종 맞춤 검색</strong> – 내 위치 기반 또는 원하는 스타일로 필터링</li>
+            <li>✅ <strong>데일리 업데이트</strong> – 2026.04.10 기준 신규 업소 및 가격 변동 반영 완료</li>
+        </ul>
+    </div>
+
     <!-- 업종별 카테고리 -->
     <div class="card">
         <h3>📂 업종별 카테고리</h3>
+        <div class="card-desc">전국 프리미엄 공간을 업종별로 한눈에 비교하세요. 가격, 위치, 후기까지 실시간 확인 가능합니다.</div>
         <div class="category-links" id="industryLinks"></div>
     </div>
 
     <!-- 지역별 카테고리 -->
     <div class="card">
         <h3>📍 지역별 카테고리</h3>
+        <div class="card-desc">강남·홍대·수원·인천 등 지역별 최신 업소 정보와 주대를 비교해보세요.</div>
         <div class="region-grid" id="regionGrid"></div>
     </div>
 
-    <!-- 업데이트 소식 (updates.html 내용을 그대로 가져옴) -->
+    <!-- 업데이트 소식 -->
     <div class="card">
         <h3>📝 업데이트 소식</h3>
+        <div class="card-desc">매일 업데이트되는 신규 업소, 할인 정보, 주대 변동 내역입니다.</div>
         <div id="updateContent" class="update-content">로딩 중...</div>
     </div>
 
     <!-- 검색 및 필터 -->
     <div class="card">
         <h3>🔍 업소 검색</h3>
+        <div class="card-desc">원하는 업종 또는 지역을 검색하세요. 실시간 필터링으로 빠르게 찾을 수 있습니다.</div>
         <div class="search-section">
-            <input type="text" id="searchInput" placeholder="업종 또는 지역 검색" onkeyup="filterLinks()">
+            <input type="text" id="searchInput" placeholder="예: 강남 가라오케, 홍대 셔츠룸" onkeyup="filterLinks()">
             <div class="filter-tabs" id="filterTabs"></div>
         </div>
         <div class="link-list" id="recommendList"></div>
     </div>
 
-    <!-- 외부 추천 사이트 (랜덤 200개) -->
+    <!-- 외부 추천 사이트 -->
     <div class="card">
         <h3>🔗 외부 추천 사이트</h3>
+        <div class="card-desc">전국 유흥 공간 관련 신뢰할 수 있는 외부 정보 사이트입니다.</div>
         <div class="link-list" id="externalList"></div>
     </div>
 
-    <!-- 제휴 사이트 (고정 전체) -->
+    <!-- 제휴 사이트 -->
     <div class="card">
         <h3>🤝 제휴 사이트</h3>
+        <div class="card-desc">clicknn과 함께하는 공식 제휴 파트너입니다.</div>
         <div class="link-list" id="affiliateList"></div>
     </div>
 
-    <footer style="text-align:center; margin-top:40px; padding:20px; color:#5c6f87;">© clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a></footer>
+    <footer style="text-align:center; margin-top:40px; padding:20px; color:#5c6f87;">
+        © clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a> | <a href="/privacy.html">개인정보처리방침</a>
+    </footer>
 </div>
 
 <a href="tel:010-0000-0000" class="floating-call">📞 전화문의</a>
@@ -102,7 +125,7 @@
         "suwon": "수원", "bucheon": "부천", "incheon": "인천", "ilsan": "일산", "paju": "파주",
         "yongin": "용인", "seongnam": "성남", "bundang": "분당", "goyang": "고양", "gimpo": "김포",
         "uijeongbu": "의정부", "magok": "마곡", "balsan": "발산", "hwagok": "화곡", "kkachisan": "까치산",
-        "juan": "주안", "bucheon": "부천", "apgujeong": "압구정", "cheongdam": "청담", "sinsa": "신사",
+        "juan": "주안", "apgujeong": "압구정", "cheongdam": "청담", "sinsa": "신사",
         "bangbae": "방배", "banpo": "반포", "dogok": "도곡", "daechidong": "대치동", "seokchon": "석촌",
         "songpa": "송파", "garakdong": "가락동", "bangidong": "방이동", "bongcheondong": "봉천동", "sillim": "신림",
         "wangsimni": "왕십리", "euljiro": "을지로", "dongmyo": "동묘", "chungmuro": "충무로", "gwanghwamun": "광화문",
@@ -141,7 +164,22 @@
         return text.trim().split(/\r?\n/).filter(line => line.trim() !== '');
     }
 
-    // ========== 업데이트 소식 (updates.html 통째로 가져오기) ==========
+    // ========== 날짜 기반 순환 로테이션 ==========
+    function getDailyItems(arr, itemsPerDay = 200) {
+        if (!arr.length) return [];
+        if (arr.length <= itemsPerDay) return [...arr];
+        const today = new Date();
+        const todayNum = parseInt(today.toISOString().slice(0,10).replace(/-/g, ''));
+        const startIdx = todayNum % arr.length;
+        const result = [];
+        for (let i = 0; i < itemsPerDay; i++) {
+            const idx = (startIdx + i) % arr.length;
+            result.push(arr[idx]);
+        }
+        return result;
+    }
+
+    // ========== 업데이트 소식 ==========
     async function loadUpdates() {
         try {
             const res = await fetch('/updates.html?v=' + Date.now());
@@ -158,21 +196,14 @@
 
     // ========== 메인 실행 ==========
     (async function() {
-        // 1. 내부 URL (urls.txt) - 200개 랜덤
-        const internalUrls = await loadTxt('/urls.txt');
-        const today = new Date();
-        const daySeed = today.getFullYear() * 365 + today.getMonth() * 31 + today.getDate();
-        function seededRandom(seed) {
-            let state = seed;
-            return function() { state = (state * 1103515245 + 12345) & 0x7fffffff; return state / 0x7fffffff; };
-        }
-        const rng = seededRandom(daySeed);
-        const shuffledInternal = [...internalUrls];
-        for (let i = shuffledInternal.length - 1; i > 0; i--) {
-            const j = Math.floor(rng() * (i + 1));
-            [shuffledInternal[i], shuffledInternal[j]] = [shuffledInternal[j], shuffledInternal[i]];
-        }
-        const dailyInternal = shuffledInternal.slice(0, 200);
+        const allInternal = await loadTxt('/urls.txt');
+        const dailyInternal = getDailyItems(allInternal, 200);
+        
+        const allExternal = await loadTxt('/external.txt');
+        const dailyExternal = getDailyItems(allExternal, 200);
+        
+        const affiliateUrls = await loadTxt('/affiliate.txt');
+
         const recommendDiv = document.getElementById('recommendList');
         dailyInternal.forEach(url => {
             const a = document.createElement('a');
@@ -181,14 +212,6 @@
             recommendDiv.appendChild(a);
         });
 
-        // 2. 외부 사이트 (external.txt) - 200개 랜덤
-        const externalUrls = await loadTxt('/external.txt');
-        const shuffledExternal = [...externalUrls];
-        for (let i = shuffledExternal.length - 1; i > 0; i--) {
-            const j = Math.floor(rng() * (i + 1));
-            [shuffledExternal[i], shuffledExternal[j]] = [shuffledExternal[j], shuffledExternal[i]];
-        }
-        const dailyExternal = shuffledExternal.slice(0, 200);
         const externalDiv = document.getElementById('externalList');
         dailyExternal.forEach(url => {
             const a = document.createElement('a');
@@ -199,8 +222,6 @@
             externalDiv.appendChild(a);
         });
 
-        // 3. 제휴 사이트 (affiliate.txt) - 전체 고정
-        const affiliateUrls = await loadTxt('/affiliate.txt');
         const affiliateDiv = document.getElementById('affiliateList');
         affiliateUrls.forEach(url => {
             const a = document.createElement('a');
@@ -211,7 +232,7 @@
             affiliateDiv.appendChild(a);
         });
 
-        // 필터 버튼 생성
+        // 필터 버튼
         const filterTabs = document.getElementById('filterTabs');
         function createFilterButtons() {
             filterTabs.innerHTML = '';
@@ -258,7 +279,6 @@
         }
         renderRecommend();
 
-        // 업데이트 소식 로드
         loadUpdates();
     })();
 

@@ -3,13 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>가라오케·노래방·룸싸롱·풀싸롱·셔츠룸·하이퍼블릭·퍼블릭·터치룸·텐프로·텐카페·일프로·호빠·노래빠·쓰리노·쩜오·하퍼 | clicknn</title>
+    <title>전국 프리미엄 공간 통합 허브 | clicknn</title>
     <meta name="description" content="전국 프리미엄 공간 정보 통합 허브. 실시간 정보, 주대 비교, 후기.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://clicknn.co.kr/">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Noto Sans KR', sans-serif; background: #f0f2f5; padding: 20px; padding-bottom: 80px; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #000;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        /* 예약 오버레이 스타일 (예시와 동일) */
+        #res-overlay {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
+                        url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .premium-label {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff00ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255,0,255,0.8);
+        }
+        .main-title {
+            font-size: 50px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 35px;
+            letter-spacing: -1px;
+        }
+        .main-title span { color: #ffff00; }
+        .status-box {
+            background: rgba(0,0,0,0.8);
+            border: 2px solid #fff;
+            padding: 20px 40px;
+            border-radius: 15px;
+            margin-bottom: 45px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        .cta-button {
+            text-decoration: none;
+            font-size: 36px;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(135deg, #ff0000 0%, #ff5500 100%);
+            padding: 25px 80px;
+            border-radius: 100px;
+            border: 4px solid #fff;
+            display: inline-block;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 30px rgba(255,0,0,0.4);
+        }
+        .cta-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(255,0,0,0.3);
+        }
+        /* 구글 봇용 숨김 콘텐츠 */
+        .hidden-seo-content {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        /* 플로팅 전화 버튼 (오버레이 위에 표시) */
+        .floating-call {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50px;
+            padding: 14px 24px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .floating-call:hover { background: #cc0000; }
+        /* 기존 카드 스타일 (숨김 영역 안에서만 사용) */
         .container { max-width: 1400px; margin: 0 auto; }
         header { background: linear-gradient(135deg, #0b2b3b, #1a4a6f); color: white; padding: 30px 25px; border-radius: 28px; margin-bottom: 30px; }
         h1 { font-size: 1.9rem; margin-bottom: 10px; }
@@ -29,105 +118,123 @@
         .filter-btn.active, .filter-btn:hover { background: #1a4a6f; color: white; }
         .link-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 20px; }
         .link-list a { display: block; padding: 6px 0; color: #1e6f9f; text-decoration: none; font-size: 0.85rem; word-break: break-all; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .floating-call { position: fixed; bottom: 20px; right: 20px; background: #ff0000; color: white; border-radius: 50px; padding: 14px 24px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; }
-        .floating-call:hover { background: #cc0000; }
         .update-button { display: inline-block; background: #1a4a6f; color: white; padding: 12px 24px; border-radius: 40px; text-decoration: none; font-weight: bold; margin-top: 10px; }
         .update-button:hover { background: #0b2b3b; }
         @media (max-width: 768px) { .link-list { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>전국 프리미엄 공간 통합 허브</h1>
-        <p>가라오케 · 노래방 · 룸싸롱 · 풀싸롱 · 셔츠룸 · 하이퍼블릭 · 퍼블릭 · 터치룸 · 텐프로 · 텐카페 · 일프로 · 호빠 · 노래빠 · 쓰리노 · 쩜오 · 하퍼</p>
-        <div class="sub">실시간 정보, 주대 비교, 생생한 후기 | clicknn.co.kr</div>
-    </header>
 
-    <div class="intro-text">
-        <strong>clicknn.co.kr</strong>은 전국 16개 업종, 50개 이상의 주요 지역에 걸친 프리미엄 유흥 공간의 <strong>실시간 주대 정보</strong>와 <strong>이용자 후기</strong>를 비교할 수 있는 대한민국 No.1 통합 허브입니다. 강남, 서초, 신논현, 역삼, 선릉, 잠실, 홍대, 수원, 인천, 부천, 일산, 분당, 동탄 등 지역별 맞춤 정보부터 가라오케·룸싸롱·하이퍼블릭·텐프로·호빠 등 업종별 상세 비교까지 — <strong>2026년 4월 10일 기준</strong> 최신 데이터로 업데이트되었습니다.
-        <ul>
-            <li>✅ <strong>실시간 주대 비교</strong> – 업소별 기본 주대, 음료 가격, 예약 조건을 한눈에</li>
-            <li>✅ <strong>생생한 후기</strong> – 실제 방문객의 매너 평가, 시설 상태, 서비스 만족도</li>
-            <li>✅ <strong>지역/업종 맞춤 검색</strong> – 내 위치 기반 또는 원하는 스타일로 필터링</li>
-            <li>✅ <strong>데일리 업데이트</strong> – 2026.04.10 기준 신규 업소 및 가격 변동 반영 완료</li>
-        </ul>
+<!-- 예약 오버레이: 사용자에게만 보임 -->
+<div id="res-overlay">
+    <div class="premium-label">★ PREMIUM VVIP ★</div>
+    <h1 class="main-title">전국 프리미엄 공간 통합 허브<br><span>실시간 예약</span></h1>
+    <div class="status-box">
+        <p style="color:#ff66ff; font-size:18px; margin: 0 0 10px 0;" id="current-date"></p>
+        <p style="font-size:28px; font-weight:900; margin: 0;">✨ 현재 정상 영업 중 ✨</p>
     </div>
-
-    <!-- 업종별 카테고리 -->
-    <div class="card">
-        <h3>📂 업종별 카테고리</h3>
-        <div class="card-desc">전국 프리미엄 공간을 업종별로 한눈에 비교하세요.</div>
-        <div class="category-links" id="industryLinks"></div>
-    </div>
-
-    <!-- 지역별 카테고리 (/categories/region_가락동.html 형식) -->
-    <div class="card">
-        <h3>📍 지역별 카테고리</h3>
-        <div class="card-desc">강남·홍대·수원·인천 등 지역별 최신 업소 정보</div>
-        <div class="region-grid" id="regionGrid"></div>
-    </div>
-
-    <!-- 업데이트 소식 - 버튼 클릭시 updates.html로 이동 -->
-    <div class="card">
-        <h3>📝 업데이트 소식</h3>
-        <div class="card-desc">매일 업데이트되는 신규 업소, 할인 정보, 주대 변동 내역입니다.</div>
-        <a href="/updates.html" class="update-button">📢 최신 업데이트 보기 →</a>
-    </div>
-
-    <!-- 검색 및 필터 -->
-    <div class="card">
-        <h3>🔍 업소 검색</h3>
-        <div class="card-desc">원하는 업종 또는 지역을 검색하세요.</div>
-        <div class="search-section">
-            <input type="text" id="searchInput" placeholder="예: 강남 가라오케" onkeyup="filterLinks()">
-            <div class="filter-tabs" id="filterTabs"></div>
-        </div>
-        <div class="link-list" id="recommendList"></div>
-    </div>
-
-    <!-- 외부 추천 사이트 -->
-    <div class="card">
-        <h3>🔗 외부 추천 사이트</h3>
-        <div class="card-desc">신뢰할 수 있는 외부 정보 사이트입니다.</div>
-        <div class="link-list" id="externalList"></div>
-    </div>
-
-    <!-- 제휴 사이트 -->
-    <div class="card">
-        <h3>🤝 제휴 사이트</h3>
-        <div class="card-desc">clicknn 공식 제휴 파트너</div>
-        <div class="link-list" id="affiliateList"></div>
-    </div>
-
-    <footer style="text-align:center; margin-top:40px; padding:20px; color:#5c6f87;">
-        © clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a>
-    </footer>
+    <a href="tel:010-0000-0001" class="cta-button">📞 전화 예약하기</a>
 </div>
 
-<a href="tel:010-0000-0000" class="floating-call">📞 전화문의</a>
+<!-- 구글 봇 전용 숨김 콘텐츠 (기존 index.html의 모든 내용) -->
+<div class="hidden-seo-content">
+    <div class="container">
+        <header>
+            <h1>전국 프리미엄 공간 통합 허브</h1>
+            <p>가라오케 · 노래방 · 룸싸롱 · 풀싸롱 · 셔츠룸 · 하이퍼블릭 · 퍼블릭 · 터치룸 · 텐프로 · 텐카페 · 일프로 · 호빠 · 노래빠 · 쓰리노 · 쩜오 · 하퍼</p>
+            <div class="sub">실시간 정보, 주대 비교, 생생한 후기 | clicknn.co.kr</div>
+        </header>
+
+        <div class="intro-text">
+            <strong>clicknn.co.kr</strong>은 전국 16개 업종, 50개 이상의 주요 지역에 걸친 프리미엄 유흥 공간의 <strong>실시간 주대 정보</strong>와 <strong>이용자 후기</strong>를 비교할 수 있는 대한민국 No.1 통합 허브입니다. 강남, 서초, 신논현, 역삼, 선릉, 잠실, 홍대, 수원, 인천, 부천, 일산, 분당, 동탄 등 지역별 맞춤 정보부터 가라오케·룸싸롱·하이퍼블릭·텐프로·호빠 등 업종별 상세 비교까지 — <strong>2026년 4월 10일 기준</strong> 최신 데이터로 업데이트되었습니다.
+            <ul>
+                <li>✅ <strong>실시간 주대 비교</strong> – 업소별 기본 주대, 음료 가격, 예약 조건을 한눈에</li>
+                <li>✅ <strong>생생한 후기</strong> – 실제 방문객의 매너 평가, 시설 상태, 서비스 만족도</li>
+                <li>✅ <strong>지역/업종 맞춤 검색</strong> – 내 위치 기반 또는 원하는 스타일로 필터링</li>
+                <li>✅ <strong>데일리 업데이트</strong> – 2026.04.10 기준 신규 업소 및 가격 변동 반영 완료</li>
+            </ul>
+        </div>
+
+        <!-- 업종별 카테고리 -->
+        <div class="card">
+            <h3>📂 업종별 카테고리</h3>
+            <div class="card-desc">전국 프리미엄 공간을 업종별로 한눈에 비교하세요.</div>
+            <div class="category-links" id="industryLinks"></div>
+        </div>
+
+        <!-- 지역별 카테고리 -->
+        <div class="card">
+            <h3>📍 지역별 카테고리</h3>
+            <div class="card-desc">강남·홍대·수원·인천 등 지역별 최신 업소 정보</div>
+            <div class="region-grid" id="regionGrid"></div>
+        </div>
+
+        <!-- 업데이트 소식 -->
+        <div class="card">
+            <h3>📝 업데이트 소식</h3>
+            <div class="card-desc">매일 업데이트되는 신규 업소, 할인 정보, 주대 변동 내역입니다.</div>
+            <a href="/updates.html" class="update-button">📢 최신 업데이트 보기 →</a>
+        </div>
+
+        <!-- 검색 및 필터 -->
+        <div class="card">
+            <h3>🔍 업소 검색</h3>
+            <div class="card-desc">원하는 업종 또는 지역을 검색하세요.</div>
+            <div class="search-section">
+                <input type="text" id="searchInput" placeholder="예: 강남 가라오케" onkeyup="filterLinks()">
+                <div class="filter-tabs" id="filterTabs"></div>
+            </div>
+            <div class="link-list" id="recommendList"></div>
+        </div>
+
+        <!-- 외부 추천 사이트 -->
+        <div class="card">
+            <h3>🔗 외부 추천 사이트</h3>
+            <div class="card-desc">신뢰할 수 있는 외부 정보 사이트입니다.</div>
+            <div class="link-list" id="externalList"></div>
+        </div>
+
+        <!-- 제휴 사이트 -->
+        <div class="card">
+            <h3>🤝 제휴 사이트</h3>
+            <div class="card-desc">clicknn 공식 제휴 파트너</div>
+            <div class="link-list" id="affiliateList"></div>
+        </div>
+
+        <footer style="text-align:center; margin-top:40px; padding:20px; color:#5c6f87;">
+            © clicknn.co.kr | <a href="/sitemap.xml">사이트맵</a>
+        </footer>
+    </div>
+</div>
+
+<!-- 플로팅 전화 버튼 (오버레이 위에 표시) -->
+<a href="tel:010-0000-0001" class="floating-call">📞 전화문의</a>
 
 <script>
     // ========== 업종별 (링크: /pages/업종명.html) ==========
     const industries = ["가라오케", "노래방", "룸싸롱", "풀싸롱", "셔츠룸", "하이퍼블릭", "퍼블릭", "터치룸", "텐프로", "텐카페", "일프로", "호빠", "노래빠", "쓰리노", "쩜오", "하퍼"];
     const industryDiv = document.getElementById('industryLinks');
-    industries.forEach(ind => {
-        const a = document.createElement('a');
-        a.href = `/pages/${ind}.html`;
-        a.textContent = ind;
-        industryDiv.appendChild(a);
-    });
+    if (industryDiv) {
+        industries.forEach(ind => {
+            const a = document.createElement('a');
+            a.href = `/pages/${ind}.html`;
+            a.textContent = ind;
+            industryDiv.appendChild(a);
+        });
+    }
 
     // ========== 지역별 (링크: /categories/region_지역명.html) ==========
     const regionNames = ["강남", "서초", "신논현", "역삼", "논현", "선릉", "잠실", "홍대", "신촌", "여의도", "수원", "부천", "인천", "일산", "파주", "용인", "성남", "분당", "고양", "김포", "의정부", "마곡", "발산", "화곡", "까치산", "주안", "압구정", "청담", "신사", "방배", "반포", "도곡", "대치동", "석촌", "송파", "가락동", "방이동", "봉천동", "신림", "왕십리", "을지로", "동묘", "충무로", "광화문", "장한평", "답십리", "마두", "백석", "탄현", "라페스타", "장항동", "인계동", "광교", "영통", "동탄", "매탄동", "매산동", "망포동", "향남", "신갈동", "기흥", "군포", "오산", "권선동", "화서동", "범계", "금곡동", "서울", "창동", "철산", "노원", "구리", "마포", "이대", "당산", "서대문", "구의동", "자양동", "광진구", "동대문"];
     const regionGrid = document.getElementById('regionGrid');
-    regionNames.forEach(regionName => {
-        const a = document.createElement('a');
-        a.href = `/categories/region_${regionName}.html`;
-        a.textContent = regionName;
-        a.className = 'region-tag';
-        regionGrid.appendChild(a);
-    });
+    if (regionGrid) {
+        regionNames.forEach(regionName => {
+            const a = document.createElement('a');
+            a.href = `/categories/region_${regionName}.html`;
+            a.textContent = regionName;
+            a.className = 'region-tag';
+            regionGrid.appendChild(a);
+        });
+    }
 
     // ========== 키워드 맵 (필터용) ==========
     const keywordMap = {
@@ -170,65 +277,74 @@
         
         const affiliateUrls = await loadTxt('/affiliate.txt');
 
-        // 내부 링크 표시 (전체 URL 그대로 텍스트)
+        // 내부 링크 표시
         const recommendDiv = document.getElementById('recommendList');
-        dailyInternal.forEach(url => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.textContent = url;  // 전체 URL 표시
-            recommendDiv.appendChild(a);
-        });
+        if (recommendDiv) {
+            dailyInternal.forEach(url => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.textContent = url;
+                recommendDiv.appendChild(a);
+            });
+        }
 
         // 외부 링크 표시
         const externalDiv = document.getElementById('externalList');
-        dailyExternal.forEach(url => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.textContent = url;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            externalDiv.appendChild(a);
-        });
+        if (externalDiv) {
+            dailyExternal.forEach(url => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.textContent = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                externalDiv.appendChild(a);
+            });
+        }
 
         // 제휴 링크 표시
         const affiliateDiv = document.getElementById('affiliateList');
-        affiliateUrls.forEach(url => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.textContent = url;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            affiliateDiv.appendChild(a);
-        });
+        if (affiliateDiv) {
+            affiliateUrls.forEach(url => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.textContent = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                affiliateDiv.appendChild(a);
+            });
+        }
 
         // 필터 버튼 생성
         const filterTabs = document.getElementById('filterTabs');
-        function createFilterButtons() {
-            filterTabs.innerHTML = '';
-            const allBtn = document.createElement('button');
-            allBtn.className = 'filter-btn active';
-            allBtn.setAttribute('data-filter', 'all');
-            allBtn.innerText = '전체';
-            filterTabs.appendChild(allBtn);
-            for (const [displayName, searchTerm] of Object.entries(keywordMap)) {
-                const btn = document.createElement('button');
-                btn.className = 'filter-btn';
-                btn.setAttribute('data-filter', searchTerm);
-                btn.innerText = displayName;
-                filterTabs.appendChild(btn);
-            }
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    filterLinks();
+        if (filterTabs) {
+            function createFilterButtons() {
+                filterTabs.innerHTML = '';
+                const allBtn = document.createElement('button');
+                allBtn.className = 'filter-btn active';
+                allBtn.setAttribute('data-filter', 'all');
+                allBtn.innerText = '전체';
+                filterTabs.appendChild(allBtn);
+                for (const [displayName, searchTerm] of Object.entries(keywordMap)) {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.setAttribute('data-filter', searchTerm);
+                    btn.innerText = displayName;
+                    filterTabs.appendChild(btn);
+                }
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        filterLinks();
+                    });
                 });
-            });
+            }
+            createFilterButtons();
         }
-        createFilterButtons();
 
         function renderRecommend(filterText = '', category = 'all') {
             const container = document.getElementById('recommendList');
+            if (!container) return;
             container.innerHTML = '';
             let filtered = dailyInternal;
             if (filterText) filtered = filtered.filter(url => url.toLowerCase().includes(filterText.toLowerCase()));
@@ -240,13 +356,15 @@
                 container.appendChild(a);
             });
         }
-        function filterLinks() {
-            const searchVal = document.getElementById('searchInput').value;
+        window.filterLinks = function() {
+            const searchVal = document.getElementById('searchInput')?.value || '';
             const activeBtn = document.querySelector('.filter-btn.active');
             const category = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
             renderRecommend(searchVal, category);
+        };
+        if (document.getElementById('searchInput')) {
+            renderRecommend();
         }
-        renderRecommend();
     })();
 
     // 스키마 추가
@@ -256,6 +374,15 @@
         const schemas = [breadcrumbSchema, faqSchema];
         schemas.forEach(schema => { const script = document.createElement('script'); script.type = 'application/ld+json'; script.textContent = JSON.stringify(schema); document.head.appendChild(script); });
     })();
+
+    // 오버레이에 오늘 날짜 표시
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const dateStr = `${year}년 ${month}월 ${day}일`;
+    const dateElem = document.getElementById('current-date');
+    if (dateElem) dateElem.innerText = dateStr + ' 현황';
 </script>
 </body>
 </html>

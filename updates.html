@@ -1,1 +1,248 @@
-4월10일 가ㅕㄱㄹㄹ랑루룸나
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>업데이트 소식 | clicknn.co.kr</title>
+    <meta name="description" content="clicknn.co.kr 실시간 업데이트 내역 - 가라오케, 룸싸롱, 하이퍼블릭 등 전국 프리미엄 공간 최신 정보">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.8;
+            font-size: 0.85rem;
+        }
+        .list-area, .detail-area {
+            padding: 20px;
+        }
+        .list-area h2 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            border-left: 4px solid #ff6b6b;
+            padding-left: 12px;
+        }
+        .update-item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .update-item:hover {
+            background: #f9f9f9;
+            padding-left: 8px;
+        }
+        .update-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #333;
+        }
+        .update-date {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 4px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .detail-content {
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+        .detail-content h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 16px;
+            background: #fafafa;
+            font-size: 0.75rem;
+            color: #aaa;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { border-radius: 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📝 clicknn 업데이트 소식</h1>
+        <p>실시간 주대 · 신규 업소 · 할인 정보</p>
+    </div>
+
+    <!-- 목록 영역 (처음에 보임) -->
+    <div id="listView" class="list-area">
+        <h2>📌 최신 업데이트</h2>
+        <div id="updateList"></div>
+    </div>
+
+    <!-- 상세 내용 영역 (처음엔 숨김) -->
+    <div id="detailView" class="detail-area" style="display: none;">
+        <button class="back-btn" onclick="showList()">← 목록으로</button>
+        <div id="detailContent" class="detail-content"></div>
+    </div>
+
+    <div class="footer">
+        © clicknn.co.kr | 전국 프리미엄 공간 통합 허브
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // 🔥 여기에 네가 업데이트 내용을 계속 추가하면 됨!!!
+    // ============================================
+    const updatesData = [
+        {
+            date: "2026.04.10",
+            title: "4월10일 가라오케 & 룸싸롱 신규 업소 추가",
+            content: `
+                <h3>🎤 신규 가라오케</h3>
+                <ul>
+                    <li><strong>강남역점</strong> - 주대 3만원, 2시간 무료음료</li>
+                    <li><strong>서초동 더블유</strong> - 1인 4만원, 룸컨디션 최상급</li>
+                </ul>
+                <h3>✨ 신규 룸싸롱</h3>
+                <ul>
+                    <li><strong>역삼 르블랑</strong> - 주류 무제한 15만원</li>
+                    <li><strong>신논현 라운지</strong> - 2인 기준 25만원, 아늑한 분위기</li>
+                </ul>
+                <p>✅ 4월10일 기준 전국 7개 신규 업소 추가 완료</p>
+            `
+        },
+        {
+            date: "2026.04.08",
+            title: "4월8일 강남 하이퍼블릭 주대 변동",
+            content: `
+                <h3>💰 주대 인하 소식</h3>
+                <ul>
+                    <li>강남 하이퍼블릭 A : 기존 8만원 → 6.5만원</li>
+                    <li>서초 하이퍼블릭 B : 9만원 → 7만원 (23시 이전)</li>
+                </ul>
+                <p>📢 4월 한정 프로모션으로 음료 1+1 이벤트 진행 중</p>
+            `
+        },
+        {
+            date: "2026.04.05",
+            title: "4월5일 부천 텐프로 & 셔츠룸 할인 정보",
+            content: `
+                <h3>🎉 부천 텐프로 3곳 특가</h3>
+                <ul>
+                    <li>더킹텐프로 : 1인 12만원 → 9.9만원</li>
+                    <li>로얄셔츠룸 : 2인 패키지 30만원 → 24만원</li>
+                </ul>
+                <p>⏰ 할인 기간 : 4월30일까지</p>
+            `
+        }
+        // ============================================
+        // 🔽 여기에 계속 추가하면 됨! 형식만 맞춰서
+        // ============================================
+        // {
+        //     date: "2026.04.12",
+        //     title: "여기에 제목 쓰면 됨",
+        //     content: `여기에 내용 (HTML 가능)`
+        // },
+    ];
+
+    // 저장용 변수
+    let currentIndex = 0;
+
+    // 목록 렌더링
+    function renderList() {
+        const listContainer = document.getElementById('updateList');
+        if (!listContainer) return;
+        
+        listContainer.innerHTML = '';
+        updatesData.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'update-item';
+            div.onclick = () => showDetail(idx);
+            div.innerHTML = `
+                <div class="update-title">${escapeHtml(item.title)}</div>
+                <div class="update-date">📅 ${item.date}</div>
+            `;
+            listContainer.appendChild(div);
+        });
+        
+        if (updatesData.length === 0) {
+            listContainer.innerHTML = '<p style="color:#999;">아직 업데이트 내역이 없습니다.</p>';
+        }
+    }
+
+    // 상세 보기
+    function showDetail(index) {
+        currentIndex = index;
+        const item = updatesData[index];
+        if (!item) return;
+        
+        document.getElementById('listView').style.display = 'none';
+        document.getElementById('detailView').style.display = 'block';
+        
+        const detailContainer = document.getElementById('detailContent');
+        detailContainer.innerHTML = `
+            <h2>${escapeHtml(item.title)}</h2>
+            <p style="color:#888; margin-bottom: 20px;">📅 ${item.date}</p>
+            <div>${item.content}</div>
+        `;
+        
+        // 페이지 제목도 변경 (SEO)
+        document.title = `${item.title} | clicknn 업데이트`;
+    }
+
+    // 목록으로 돌아가기
+    function showList() {
+        document.getElementById('listView').style.display = 'block';
+        document.getElementById('detailView').style.display = 'none';
+        document.title = '업데이트 소식 | clicknn.co.kr';
+    }
+
+    // XSS 방지 간단 함수
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // 페이지 로드 시 목록 표시
+    renderList();
+</script>
+</body>
+</html>

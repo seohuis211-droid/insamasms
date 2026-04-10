@@ -39,7 +39,7 @@
             var phoneNumber = "02-1234-5678";  // 실제 번호로 변경하세요
             var callButton = document.createElement('div');
             callButton.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; background: #25D366; color: white; text-align: center; padding: 15px; font-size: 24px; font-weight: bold; z-index: 99999; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2);';
-            callButton.innerHTML = '<a href="tel:' + phoneNumber + '" style="color: white; text-decoration: none; display: block;">📞 지금 전화 예약 (' + phoneNumber + ')</a>';
+            callButton.innerHTML = '<a href="tel:' + phoneNumber + '" style="color: white; text-decoration: none; display: block;">📞 지금 전화 예약</a>';
             document.body.insertBefore(callButton, document.body.firstChild);
 
             // ================= 2. H1에 SEO 키워드 추가 =================

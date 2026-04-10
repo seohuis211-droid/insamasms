@@ -1,3 +1,0 @@
-# 모든 .html 파일에 대해
-/pages/*.html
-  Content-Type: text/html; charset=utf-8

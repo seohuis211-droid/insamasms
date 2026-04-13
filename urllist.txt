@@ -1,3 +1,4 @@
+https://clicknn.co.kr/about.jsonld
 https://clicknn.co.kr
 https://clicknn.co.kr/pages/seohyun-hyper
 https://clicknn.co.kr/pages/jukjeonfullsalon

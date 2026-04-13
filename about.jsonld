@@ -1,0 +1,55 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://clicknn.co.kr/#website",
+      "url": "https://clicknn.co.kr",
+      "name": "클릭앤 (Clicknn)",
+      "description": "전국 지역별 가라오케, 하이퍼블릭, 셔츠룸, 텐프로 등 업종별 상세 정보 및 예약 가이드",
+      "publisher": { "@id": "https://clicknn.co.kr/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://clicknn.co.kr/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://clicknn.co.kr/#organization",
+      "name": "클릭앤",
+      "url": "https://clicknn.co.kr",
+      "logo": "https://clicknn.co.kr/favicon.ico",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "areaServed": "KR",
+        "availableLanguage": "Korean"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://clicknn.co.kr/#service-categories",
+      "name": "주요 서비스 업종",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "url": "https://clicknn.co.kr/categories/하이퍼블릭", "name": "하이퍼블릭" },
+        { "@type": "ListItem", "position": 2, "url": "https://clicknn.co.kr/categories/셔츠룸", "name": "셔츠룸" },
+        { "@type": "ListItem", "position": 3, "url": "https://clicknn.co.kr/categories/텐프로", "name": "텐프로" },
+        { "@type": "ListItem", "position": 4, "url": "https://clicknn.co.kr/categories/가라오케", "name": "가라오케" },
+        { "@type": "ListItem", "position": 5, "url": "https://clicknn.co.kr/categories/룸싸롱", "name": "룸싸롱" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://clicknn.co.kr/#regional-categories",
+      "name": "전국 주요 지역 서비스",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "url": "https://clicknn.co.kr/categories/region_강남", "name": "강남" },
+        { "@type": "ListItem", "position": 2, "url": "https://clicknn.co.kr/categories/region_수원", "name": "수원" },
+        { "@type": "ListItem", "position": 3, "url": "https://clicknn.co.kr/categories/region_인천", "name": "인천" },
+        { "@type": "ListItem", "position": 4, "url": "https://clicknn.co.kr/categories/region_일산", "name": "일산" },
+        { "@type": "ListItem", "position": 5, "url": "https://clicknn.co.kr/categories/region_송파", "name": "송파" }
+      ]
+    }
+  ]
+}

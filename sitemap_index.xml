@@ -1,2 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://clicknn.co.kr/sitemap_1.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_2.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_3.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_4.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_5.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_6.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_7.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_8.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_9.xml</loc><lastmod>2026-04-13</lastmod></sitemap><sitemap><loc>https://clicknn.co.kr/sitemap_10.xml</loc><lastmod>2026-04-13</lastmod></sitemap></sitemapindex>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://clicknn.co.kr/about.jsonld</loc>
+    <lastmod>2026-04-13</lastmod>
+  </sitemap>
+  
+  <sitemap><loc>https://clicknn.co.kr/sitemap_1.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_2.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_3.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_4.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_5.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_6.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_7.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_8.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_9.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+  <sitemap><loc>https://clicknn.co.kr/sitemap_10.xml</loc><lastmod>2026-04-13</lastmod></sitemap>
+</sitemapindex>
